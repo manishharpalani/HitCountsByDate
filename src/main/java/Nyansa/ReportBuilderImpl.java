@@ -7,18 +7,23 @@ class ReportBuilderImpl implements ReportBuilder {
     private final HitReport report = new HitReportImpl();
 
 
-    // Report creates a HitBucket for each day (date is calculated using getStartOfEpochDay)
-    // Report keeps buckets sorted by the date
-    // HashMap contains hash map of URL to hit counts.
+//     Report creates a HitBucket for each day (date is calculated using getStartOfEpochDay)
+//     Report keeps buckets sorted by the date
+//     HashMap contains hash map of URL to hit counts.
+//
+//     N = number of lines
+//     Assume: N > B * U (given multiple url hits in each bucket)
+//          B = number of HitBuckets - number of days of data (insertion sorted order)
+//          U = average number of unique urls in each bucket (constant, does not grow as N scales)
+//
+//    Space Complexity: B * U = B
+//
+//    Time Complexity:
+//      loading date file takes N*B*LogB
+//
+//      generate report requires sorting the entries in each HitBucket by hit counts
+//          B*LogB*U*LogU = BLogB (U is a constant)
 
-    // N = number of lines
-    // Assume: N > B * U (given multiple url hits in each bucket)
-    //      B = number of HitBuckets - number of days of data (insertion sorted order)
-    //      U = average number of unique urls in each bucket (constant, does not grow as N scales)
-    //  loading date file takes N*B*LogB
-    //
-    //  generate report requires sorting the entries in each HitBucket by hit counts
-    //      B*LogB*U*LogU = BLogB (U is a constant)
 
     // Total insertion and report time complexity: N*B*LogB + B*LogB = N*B*LogB
     @Override

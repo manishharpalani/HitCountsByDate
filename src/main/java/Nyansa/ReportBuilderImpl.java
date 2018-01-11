@@ -1,7 +1,9 @@
 package Nyansa;
 
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.Collection;
+
+import static java.lang.System.exit;
 
 class ReportBuilderImpl implements ReportBuilder {
     private final HitReport report = new HitReportImpl();
@@ -30,9 +32,8 @@ class ReportBuilderImpl implements ReportBuilder {
     public void load(String inputFile) {
         try {
             report.process(inputFile);
-        } catch(IOException ioe) {
-            System.err.println(ioe.getMessage());
-            ioe.printStackTrace();
+        } catch(FileNotFoundException ioe) {
+            System.err.println(String.format("File not found: '%s'. Exiting.\n", inputFile));
         }
     }
 
@@ -52,7 +53,8 @@ class ReportBuilderImpl implements ReportBuilder {
 
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.err.println("Valid file name required as parameter");
+            System.err.println("Missing parameter - input file name required. Exiting.");
+            exit(0);
         }
         ReportBuilder reportBuilder = new ReportBuilderImpl();
         reportBuilder.load(args[0]);

@@ -1,8 +1,11 @@
 package Nyansa;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.io.FileNotFoundException;
+import java.util.Collection;
+import java.util.Scanner;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 class HitReportImpl implements HitReport {
 
@@ -10,7 +13,7 @@ class HitReportImpl implements HitReport {
 
     @Override
     public void process(String fileName)
-            throws IOException {
+            throws FileNotFoundException {
         Scanner scanner = new Scanner(new File(fileName));
 
         while (scanner.hasNextLine()) {

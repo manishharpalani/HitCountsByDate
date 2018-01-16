@@ -1,14 +1,13 @@
 package Nyansa;
 
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.Set;
 
 public interface HitBucket {
     void hit(String entity);
 
+    long getTopHitCount();
     long getCount(String entity);
-
-    Stream<Map.Entry<String, Long>> getSortedMapByFreq();
+    Set<String> getItemsWithHitCount(Long hitCount);
 
     String getHeader();
 }

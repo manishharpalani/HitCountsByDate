@@ -9,7 +9,7 @@ import java.util.TreeMap;
 
 class HitReportImpl implements HitReport {
 
-    SortedMap<Long, HitBucket> hitsForDate = new TreeMap<>();
+    private final SortedMap<Long, HitBucket> hitsForDate = new TreeMap<>();
 
     @Override
     public void process(String fileName)

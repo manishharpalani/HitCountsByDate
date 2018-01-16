@@ -17,19 +17,22 @@
     www.twitter.com 1
 
 # Details on O(N) Complexity
-     Report creates a HitBucket for each day (date is calculated using getStartOfEpochDay)
-     Report keeps buckets sorted by the date
-     HashMap contains hash map of URL to hit counts.
+HitReport creates a HitBucket indexed by getStartOfEpochDay (hour, min, sec of timestamp are discarded
+HitBucket keeps the url in 2 maps
 
-     N = number of lines
-     Assume: N > B * U (given multiple url hits in each bucket)
-          B = number of HitBuckets - number of days of data (insertion sorted order)
-          U = average number of unique urls in each bucket (constant, does not grow as N scales)
+    1. url:frequency
+    2. frequency;set of urls
 
-    Space Complexity: B * U = B
+Both maps are updated, as needed, for each hit
+
+    N = number of lines
+
+    Space Complexity: O(N)
 
     Time Complexity:
-      loading date file takes N*B*LogB
+    loading date file takes O(N)
 
-      generate report requires sorting the entries in each HitBucket by hit counts
-          B*LogB*U*LogU = BLogB (U is a constant)
+Generating report requires getting the HitBuckets in order from most recent to the oldest
+For each bucket we get the urls in order from most frequent to least frequent (use frequency;set of urls)
+
+Time Complexity: O(N)

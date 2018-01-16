@@ -1,13 +1,14 @@
 package Nyansa;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
+import com.google.common.collect.Sets;
+
+import java.util.*;
 
 class HitBucketImpl implements HitBucket {
-    final String header;
-    Map<String, Long> freq = new HashMap<String, Long>();
+    private final String header;
+    private final Map<String, Long> urlFreq = new HashMap<String, Long>();   // URL to hitCount
+    private final Map<Long, Set<String>> freqToUrls = new HashMap<>(); // hitCount to Set of URLs
+    private Long topHitCount = 0l;
 
     public HitBucketImpl(String header) {
         this.header = header;
@@ -15,28 +16,31 @@ class HitBucketImpl implements HitBucket {
 
     @Override
     public void hit(String entity) {
-        Long count = freq.get(entity);
-        if (count == null) {
-            freq.put(entity, 1l);
-        } else {
-            freq.put(entity, count + 1);
+        Long entityFreq = urlFreq.merge(entity, 1l, Long::sum);
+
+        if (entityFreq > 1) {
+            freqToUrls.get(entityFreq - 1).remove(entity);
         }
+        freqToUrls.merge(entityFreq, Sets.newHashSet(entity), (a, b) -> {a.addAll(b); return a; } );
+
+        if (entityFreq > topHitCount) {
+            topHitCount = entityFreq;
+        }
+    }
+
+    @Override
+    public long getTopHitCount() {
+        return topHitCount;
     }
 
     @Override
     public long getCount(String entity) {
-        Long count = freq.get(entity);
-        if (count == null) {
-            return 0;
-        } else {
-            return count;
-        }
+        return urlFreq.getOrDefault(entity, 0l);
     }
 
     @Override
-    public Stream<Map.Entry<String, Long>> getSortedMapByFreq() {
-        return freq.entrySet().stream()
-                .sorted(Collections.reverseOrder(Map.Entry.comparingByValue()));
+    public Set<String> getItemsWithHitCount(Long hitCount) {
+        return (hitCount > 0 && hitCount <= topHitCount) ? freqToUrls.get(hitCount) : Sets.newHashSet();
     }
 
     @Override

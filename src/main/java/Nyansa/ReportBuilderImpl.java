@@ -5,29 +5,27 @@ import java.util.Collection;
 
 import static java.lang.System.exit;
 
+/*
+HitReport creates a HitBucket indexed by getStartOfEpochDay (hour, min, sec of timestamp are discarded
+HitBucket keeps the url in 2 maps
+    1. url:frequency
+    2. frequency;set of urls
+Both maps are updated, as needed, for each hit
+
+    N = number of lines
+    Space Complexity: O(N)
+
+    Time Complexity:
+    loading date file takes O(N)
+
+Generating report requires getting the HitBuckets in order from most recent to the oldest
+For each bucket we get the urls in order from most frequent to least frequent (use frequency;set of urls)
+
+Time Complexity: O(N)
+*/
 class ReportBuilderImpl implements ReportBuilder {
     private final HitReport report = new HitReportImpl();
 
-
-//     Report creates a HitBucket for each day (date is calculated using getStartOfEpochDay)
-//     Report keeps buckets sorted by the date
-//     HashMap contains hash map of URL to hit counts.
-//
-//     N = number of lines
-//     Assume: N > B * U (given multiple url hits in each bucket)
-//          B = number of HitBuckets - number of days of data (insertion sorted order)
-//          U = average number of unique urls in each bucket (constant, does not grow as N scales)
-//
-//    Space Complexity: B * U = B
-//
-//    Time Complexity:
-//      loading date file takes N*B*LogB
-//
-//      generate report requires sorting the entries in each HitBucket by hit counts
-//          B*LogB*U*LogU = BLogB (U is a constant)
-
-
-    // Total insertion and report time complexity: N*B*LogB + B*LogB = N*B*LogB
     @Override
     public void load(String inputFile) {
         try {
@@ -47,8 +45,12 @@ class ReportBuilderImpl implements ReportBuilder {
 
     private void printDayReport(HitBucket dayHits) {
         System.out.println(dayHits.getHeader());
-        dayHits.getSortedMapByFreq()
-                .forEach(e -> System.out.println(e.getKey() + " " + e.getValue()));
+
+        for(long hits = dayHits.getTopHitCount(); hits >= 1; --hits) {
+            for (String url: dayHits.getItemsWithHitCount(hits)) {
+                System.out.println(String.format("%s %d", url, hits));
+            }
+        }
     }
 
     public static void main(String[] args) {
@@ -60,6 +62,4 @@ class ReportBuilderImpl implements ReportBuilder {
         reportBuilder.load(args[0]);
         reportBuilder.printReport();
     }
-
-
 }

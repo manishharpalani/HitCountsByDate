@@ -16,15 +16,18 @@ class HitBucketImpl implements HitBucket {
 
     @Override
     public void hit(String entity) {
-        Long entityFreq = urlFreq.merge(entity, 1l, Long::sum);
+        Long hitCount = urlFreq.merge(entity, 1l, Long::sum);
 
-        if (entityFreq > 1) {
-            freqToUrls.get(entityFreq - 1).remove(entity);
+        if (hitCount > 1) {
+            freqToUrls.get(hitCount - 1).remove(entity);
         }
-        freqToUrls.merge(entityFreq, Sets.newHashSet(entity), (a, b) -> {a.addAll(b); return a; } );
+        freqToUrls.merge(hitCount, Sets.newHashSet(entity), (a, b) -> {
+            a.addAll(b);
+            return a;
+        });
 
-        if (entityFreq > topHitCount) {
-            topHitCount = entityFreq;
+        if (hitCount > topHitCount) {
+            topHitCount = hitCount;
         }
     }
 

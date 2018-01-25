@@ -30,7 +30,7 @@ class ReportBuilderImpl implements ReportBuilder {
     public void load(String inputFile) {
         try {
             report.process(inputFile);
-        } catch(FileNotFoundException ioe) {
+        } catch (FileNotFoundException ioe) {
             System.err.println(String.format("File not found: '%s'. Exiting.\n", inputFile));
         }
     }
@@ -38,7 +38,7 @@ class ReportBuilderImpl implements ReportBuilder {
     @Override
     public void printReport() {
         Collection<HitBucket> hitCounts = report.getHitCounts();
-        for (HitBucket dayHits: hitCounts) {
+        for (HitBucket dayHits : hitCounts) {
             printDayReport(dayHits);
         }
     }
@@ -46,8 +46,8 @@ class ReportBuilderImpl implements ReportBuilder {
     private void printDayReport(HitBucket dayHits) {
         System.out.println(dayHits.getHeader());
 
-        for(long hits = dayHits.getTopHitCount(); hits >= 1; --hits) {
-            for (String url: dayHits.getItemsWithHitCount(hits)) {
+        for (long hits = dayHits.getTopHitCount(); hits >= 1; --hits) {
+            for (String url : dayHits.getItemsWithHitCount(hits)) {
                 System.out.println(String.format("%s %d", url, hits));
             }
         }

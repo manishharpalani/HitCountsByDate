@@ -23,19 +23,16 @@ class HitReportImpl implements HitReport {
     }
 
     private void processLine(String line) {
-        if (line.length() > 0) {
-            long epochSeconds = Long.parseLong(line.split("\\|")[0]);
-            addHit(ReportDate.getStartOfEpochDay(epochSeconds), line.split("\\|")[1]);
+        String[] fields = line.split("\\|");
+        if (fields.length >= 2) {
+            long epochSeconds = Long.parseLong(fields[0]);
+            addHit(ReportDate.getStartOfEpochDay(epochSeconds), fields[1]);
         }
     }
 
     private void addHit(Long epochDateSec, String entity) {
-        HitBucket hitBucket = hitsForDate.get(epochDateSec);
-        if (hitBucket == null) {
-            hitBucket = new HitBucketImpl(ReportDate.asGmtStr(epochDateSec));
-            hitsForDate.put(epochDateSec, hitBucket);
-        }
-        hitBucket.hit(entity);
+        hitsForDate.computeIfAbsent(epochDateSec, k -> new HitBucketImpl(ReportDate.asGmtStr(k)))
+                .hit(entity);
     }
 
     @Override

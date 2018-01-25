@@ -16,7 +16,7 @@ public class ReportDate {
     }
 
     public static String asGmtStr(long epochTimeSec) {
-        Date date = new Date(epochTimeSec *1000);
+        Date date = new Date(epochTimeSec * 1000);
         return dateFormat.format(date).concat(" GMT");
     }
 

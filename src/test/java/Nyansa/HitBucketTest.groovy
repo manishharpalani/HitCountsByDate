@@ -28,11 +28,11 @@ class HitBucketTest extends Specification {
         assert hitCounts.getCount(url) == hits
 
         where:
-        url             ||   hits
-        "www.aaa.com"   ||   0
-        "www.abc.com"   ||   2
-        "www.xyz.com"   ||   2
-        "www.nyansa.com"||   4
+        url              || hits
+        "www.aaa.com"    || 0
+        "www.abc.com"    || 2
+        "www.xyz.com"    || 2
+        "www.nyansa.com" || 4
     }
 
     def "test getItemsWithHitCount"() {
@@ -46,7 +46,7 @@ class HitBucketTest extends Specification {
         5       || []
         4       || ["www.nyansa.com"]
         3       || []
-        2       || ["www.xyz.com","www.abc.com"]
+        2       || ["www.xyz.com", "www.abc.com"]
         1       || []
         0       || []
     }

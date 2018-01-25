@@ -4,7 +4,7 @@
    2. Set Main Class: _Nyansa.ReportBuilderImpl_
    3. Set Program Argument: resources/input.txt 
 
-# Program Output
+# Program Output input1
     08/08/2014 GMT
     www.facebook.com 2
     www.google.com 2
@@ -15,6 +15,22 @@
     www.cnn.com 1
     08/10/2014 GMT
     www.twitter.com 1
+
+# Output for input2
+    12/11/2010 GMT
+    www.sierra.com 1
+    08/08/2014 GMT
+    www.facebook.com 2
+    www.google.com 2
+    news.ycombinator.com 1
+    08/09/2014 GMT
+    www.nba.com 3
+    sports.yahoo.com 2
+    www.cnn.com 1
+    08/10/2014 GMT
+    www.twitter.com 1
+    01/11/2018 GMT
+    www.manish.com 1
 
 # Details on O(N) Complexity
 HitReport creates a HitBucket indexed by getStartOfEpochDay (hour, min, sec of timestamp are discarded
